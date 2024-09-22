@@ -49,10 +49,6 @@ public class EventHandler {
     public void onLeave(DisconnectEvent event) {
         if(!proxy.AuthPlayers.contains(event.getPlayer().getUsername())) return;
         proxy.AuthPlayers.remove(event.getPlayer().getUsername());
-        try {
-            proxy.clientPack.close(event.getPlayer().getUsername());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 }

@@ -23,7 +23,6 @@ public class Proxy {
     public final Logger logger;
     public static Proxy instance;
     public final Path dir;
-    public final ClientPack clientPack;
 
     @Inject
     public Proxy(ProxyServer server, Logger logger, @DataDirectory Path dir) throws InterruptedException {
@@ -31,7 +30,6 @@ public class Proxy {
         this.logger = logger;
         this.dir = dir;
         instance = this;
-        clientPack = new ClientPack();
     }
 
     @Subscribe
