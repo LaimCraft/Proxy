@@ -14,6 +14,7 @@ public class MySQLProxy {
                     "'"+login+"');");
             return true;
     } catch (SQLException ex) {
+            Proxy.getInstance().logger.info("error:" + ex.getMessage());
             return false;}}
 
     public static String get(String login) {
@@ -36,7 +37,9 @@ public class MySQLProxy {
     public static void reset() {
         try (Connection connection = DriverManager.getConnection(Settings.host, Settings.user, Settings.password)) {
             connection.createStatement().execute("TRUNCATE TABLE `laimcraft`.`proxy`;");
-        }catch (SQLException ex) {}
+        }catch (SQLException ex) {
+            Proxy.getInstance().logger.info("error: " + ex.getMessage());
+        }
     }
 
 }

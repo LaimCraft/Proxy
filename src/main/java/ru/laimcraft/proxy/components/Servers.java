@@ -12,6 +12,6 @@ import java.util.List;
 public class Servers {
     public final static void registerAll(ProxyServer server) {
         server.registerServer(new ServerInfo("castle", new InetSocketAddress("127.0.0.1", 60200)));
-        server.registerServer(new ServerInfo("vanilla", new InetSocketAddress("127.0.0.1", 25565)));
+        server.registerServer(new ServerInfo("vanilla", new InetSocketAddress("127.0.0.1", 60120)));
     }
 }

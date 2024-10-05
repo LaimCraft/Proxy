@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/../../LaimCraft/Servers/Proxy/plugins</output-path>
     <root id="archive" name="Proxy.jar">
       <element id="module-output" name="Proxy" />
-      <element id="dir-copy" path="$USER_HOME$/.jdks/openjdk-21.0.2/legal" />
     </root>
   </artifact>
 </component>
