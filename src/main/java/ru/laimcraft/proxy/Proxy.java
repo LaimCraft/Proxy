@@ -20,6 +20,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.slf4j.Logger;
 import ru.laimcraft.proxy.commands.Coins;
+import ru.laimcraft.proxy.commands.Online;
 import ru.laimcraft.proxy.components.Servers;
 import ru.laimcraft.proxy.mysql.SQLManager;
 
@@ -52,7 +53,11 @@ public class Proxy {
         CommandMeta meta = server.getCommandManager().metaBuilder("coins")
                 .plugin(this)
                 .build();
+        CommandMeta metaOnline = server.getCommandManager().metaBuilder("online")
+                .plugin(this)
+                .build();
         server.getCommandManager().register(meta, new Coins());
+        server.getCommandManager().register(metaOnline, new Online());
         server.getChannelRegistrar().register(MinecraftChannelIdentifier.create("server", "transfer"));
         // server.getCommandManager().register(coins());
     }
