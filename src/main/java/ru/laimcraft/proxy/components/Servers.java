@@ -17,5 +17,6 @@ public class Servers {
         server.registerServer(new ServerInfo("roleplay", new InetSocketAddress("127.0.0.1", 60250)));
         server.registerServer(new ServerInfo("rpb", new InetSocketAddress("127.0.0.1", 25670)));
         server.registerServer(new ServerInfo("pillarsoffortune", new InetSocketAddress("127.0.0.1", 60421)));
+        server.registerServer(new ServerInfo("oceanworld", new InetSocketAddress("127.0.0.1", 6740)));
     }
 }
