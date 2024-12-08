@@ -21,6 +21,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.slf4j.Logger;
 import ru.laimcraft.proxy.commands.Coins;
 import ru.laimcraft.proxy.commands.Online;
+import ru.laimcraft.proxy.commands.ToLobby;
 import ru.laimcraft.proxy.components.Servers;
 import ru.laimcraft.proxy.mysql.SQLManager;
 
@@ -56,8 +57,16 @@ public class Proxy {
         CommandMeta metaOnline = server.getCommandManager().metaBuilder("online")
                 .plugin(this)
                 .build();
+        CommandMeta metaLobby = server.getCommandManager().metaBuilder("lobby")
+                .plugin(this)
+                .build();
+        CommandMeta metaHub = server.getCommandManager().metaBuilder("hub")
+                .plugin(this)
+                .build();
         server.getCommandManager().register(meta, new Coins());
         server.getCommandManager().register(metaOnline, new Online());
+        server.getCommandManager().register(metaLobby, new ToLobby());
+        server.getCommandManager().register(metaHub, new ToLobby());
         server.getChannelRegistrar().register(MinecraftChannelIdentifier.create("server", "transfer"));
         // server.getCommandManager().register(coins());
     }
