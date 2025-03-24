@@ -69,7 +69,7 @@ public class Proxy {
         server.getCommandManager().register(metaOnline, new Online());
         server.getCommandManager().register(metaLobby, new ToLobby());
         server.getCommandManager().register(metaHub, new ToLobby());
-        server.getChannelRegistrar().register(MinecraftChannelIdentifier.create("server", "transfer"));
+        server.getChannelRegistrar().register(MinecraftChannelIdentifier.create("laimcraft", "proxy"));
         // server.getCommandManager().register(coins());
     }
 

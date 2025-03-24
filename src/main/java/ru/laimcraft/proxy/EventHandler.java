@@ -65,7 +65,7 @@ public class EventHandler {
     @Subscribe
     public void onMessage(PluginMessageEvent event) {
         switch (event.getIdentifier().getId()) {
-            case "server:transfer":
+            case "laimcraft:proxy":
                 ByteArrayDataInput input = event.dataAsDataStream();
                 String key = input.readUTF();
                 if (!key.equals(Proxy.getInstance().secret)) return;
@@ -80,16 +80,13 @@ public class EventHandler {
                             player.createConnectionRequest(server);
                     CompletableFuture<ConnectionRequestBuilder.Result> result =
                             connectionRequestBuilder.connect();
-                }
-
-                String login = Utils.byteArrayToString(event.getData());
-                if (login == null) return;
-                if (Proxy.getInstance().server.getAllPlayers().contains(login)) {
-                    Proxy.getInstance().server.getPlayer(login).get().transferToHost
-                            (Proxy.getInstance().server.getServer("castle").get().getServerInfo().getAddress());
                     return;
-                }
+                } if (request.equalsIgnoreCase("login")) {
+                String login = input.readUTF();
+                Player player = Proxy.getInstance().server.getPlayer(login).get();
+                Proxy.authPlayers.put(login, player);
                 return;
+            } else return;
             default:
                 return;
         }
