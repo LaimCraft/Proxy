@@ -7,30 +7,31 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.CommandSource;
-import com.velocitypowered.api.command.VelocityBrigadierMessage;
-import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyReloadEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.slf4j.Logger;
 import ru.laimcraft.proxy.commands.Coins;
 import ru.laimcraft.proxy.commands.Online;
 import ru.laimcraft.proxy.commands.ToLobby;
 import ru.laimcraft.proxy.components.Servers;
-import ru.laimcraft.proxy.mysql.SQLManager;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Plugin(id = "proxy", name = "Proxy", version = "1.0.0", url = "https://github.com/LaimCraft/Proxy", authors = {"LaimCraft"})
 public class Proxy {
 
-    //public final List<String> AuthPlayers = new ArrayList<>();
+    public static final HashMap<String, Player> authPlayers = new HashMap<>();
     public final ProxyServer server;
     public final Logger logger;
     private static Proxy instance;
@@ -47,9 +48,10 @@ public class Proxy {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        if(!dir.toFile().exists()) {dir.toFile().mkdir();}
+        if (!dir.toFile().exists()) {
+            dir.toFile().mkdir();
+        }
         server.getEventManager().register(this, new EventHandler());
-        SQLManager.reset();
         Servers.registerAll(server);
         CommandMeta meta = server.getCommandManager().metaBuilder("coins")
                 .plugin(this)
@@ -81,7 +83,7 @@ public class Proxy {
         return instance;
     }
 
-    private BrigadierCommand coins() {
+    private BrigadierCommand coins() { // Не реальная команда!
         LiteralCommandNode<CommandSource> coins = BrigadierCommand.literalArgumentBuilder("coins") //Команда
                 .executes(commandContext -> {
                     CommandSource source = commandContext.getSource();

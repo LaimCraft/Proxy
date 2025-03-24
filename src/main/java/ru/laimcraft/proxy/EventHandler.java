@@ -2,32 +2,24 @@ package ru.laimcraft.proxy;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.command.PlayerAvailableCommandsEvent;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.event.player.ServerLoginPluginMessageEvent;
 import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.checkerframework.checker.nullness.qual.EnsuresKeyFor;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import ru.laimcraft.proxy.events.PlayerConnectToServer;
-import ru.laimcraft.proxy.mysql.SQLManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class EventHandler {
@@ -90,7 +82,6 @@ public class EventHandler {
                             connectionRequestBuilder.connect();
                 }
 
-
                 String login = Utils.byteArrayToString(event.getData());
                 if (login == null) return;
                 if (Proxy.getInstance().server.getAllPlayers().contains(login)) {
@@ -107,7 +98,7 @@ public class EventHandler {
     @Subscribe
     public void onSrv(ServerPreConnectEvent event) throws InterruptedException {
         if (event.getOriginalServer().getServerInfo().getName().equals("lobby")) return;
-        if (SQLManager.isAuth(event.getPlayer())) return;
+        if (Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) return;
         String message = "Нельзя зайти на сервер пока вы не авторизовались.";
         Component component = Component.text(message)
                 .color(TextColor.color(0xFF0000));
@@ -116,18 +107,7 @@ public class EventHandler {
     }
 
     @Subscribe
-    public void onEventE(PlayerAvailableCommandsEvent event) {
-        String serverName = event.getPlayer().getCurrentServer().get().getServerInfo().getName();
-        switch (serverName) {
-            default:
-                event.getRootNode();
-                return;
-        }
-    }
-
-    @Subscribe
     public void onLeave(DisconnectEvent event) {
-        SQLManager.remove(event.getPlayer().getUsername());
-
+        Proxy.authPlayers.remove(event.getPlayer().getUsername());
     }
 }
