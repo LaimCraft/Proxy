@@ -11,7 +11,7 @@ public class Online implements SimpleCommand {
     @Override
     public void execute(Invocation data) {
         Player player = (Player) data.source();
-        player.sendMessage(Component.text("Онлайн на всех серверах: " + Proxy.getInstance().server.getAllPlayers().size(),
+        player.sendMessage(Component.text("Онлайн на всех серверах: " + Proxy.server.getAllPlayers().size(),
                 NamedTextColor.GOLD));
     }
 }

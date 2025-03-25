@@ -8,7 +8,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import ru.laimcraft.proxy.Proxy;
 import ru.laimcraft.proxy.mysql.MySQLAccounts;
-import ru.laimcraft.proxy.mysql.SQLManager;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +18,7 @@ public class Coins implements SimpleCommand {
     @Override
     public void execute(Invocation data) {
         Player player = (Player) data.source();
-        if(!SQLManager.isAuth(player)) return;
+        if(!Proxy.authPlayers.containsKey(player.getUsername())) return;
 
         String[] args = data.arguments();
 
@@ -49,8 +48,8 @@ public class Coins implements SimpleCommand {
                         MySQLAccounts.pay(player.getUsername(), args[1], amount);
                         player.sendMessage(Component.text("Вы успешно перевели игроку " + args[1] + " " + amount + " coins",
                                 NamedTextColor.DARK_GREEN));
-                        if(Proxy.getInstance().server.getAllPlayers().contains(args[1])) {
-                            Proxy.getInstance().server.getPlayer(args[1]).get()
+                        if(Proxy.server.getAllPlayers().contains(args[1])) {
+                            Proxy.server.getPlayer(args[1]).get()
                                     .sendMessage(Component.text("Вам перевел игрок " + player.getUsername() + " " + amount + " coins",
                                     NamedTextColor.DARK_GREEN));}
                         return;

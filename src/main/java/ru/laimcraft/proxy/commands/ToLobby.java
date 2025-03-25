@@ -15,7 +15,7 @@ public class ToLobby implements SimpleCommand {
     public void execute(Invocation data) {
         Player player = (Player) data.source();
         if(player.getCurrentServer().get().getServerInfo().getName().equals("lobby")) return;
-        RegisteredServer server = Proxy.getInstance().server.getServer("lobby").get();
+        RegisteredServer server = Proxy.server.getServer("lobby").get();
 
         ConnectionRequestBuilder connectionRequestBuilder =
                 player.createConnectionRequest(server);

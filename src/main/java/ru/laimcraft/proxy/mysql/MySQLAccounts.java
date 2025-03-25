@@ -14,7 +14,7 @@ public class MySQLAccounts {
                 return resultSet.getString(1);
             }return null;
         } catch (SQLException ex) {
-            Proxy.getInstance().logger.info(ex.getMessage());
+            Proxy.logger.info(ex.getMessage());
             return "ex";}}
 
     public static int getBalance(String Login) {
@@ -24,7 +24,7 @@ public class MySQLAccounts {
                 return resultSet.getInt(1);
             }return -1;
         } catch (SQLException ex) {
-            Proxy.getInstance().logger.info(ex.getMessage());
+            Proxy.logger.info(ex.getMessage());
             return -2;}}
 
     public static boolean pay(String login, String pay, int amount) {
@@ -39,7 +39,7 @@ public class MySQLAccounts {
             ps.setString(2, login);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Proxy.getInstance().logger.info(ex.getMessage());}}
+            Proxy.logger.info(ex.getMessage());}}
 
     public static void removeBalance(String login, int amount) {
         try (Connection connection = DriverManager.getConnection(Settings.host, Settings.user, Settings.password)) {
@@ -48,7 +48,7 @@ public class MySQLAccounts {
             ps.setString(2, login);
             ps.executeUpdate();
         } catch (SQLException ex) {
-            Proxy.getInstance().logger.info(ex.getMessage());}}
+            Proxy.logger.info(ex.getMessage());}}
 
 
 

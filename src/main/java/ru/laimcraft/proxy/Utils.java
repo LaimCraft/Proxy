@@ -1,5 +1,9 @@
 package ru.laimcraft.proxy;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import com.velocitypowered.api.proxy.Player;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -12,7 +16,7 @@ public class Utils {
             digest.reset();
             digest.update(input.getBytes("utf8"));
             toReturn = String.format("%0128x", new BigInteger(1, digest.digest()));} catch (Exception e) {
-            Proxy.getInstance().logger.info(e.toString());}return toReturn;}
+            Proxy.logger.info(e.toString());}return toReturn;}
 
     public static boolean checkPlayerName(String player) {
         if(player == null || player.isEmpty()) return false;
@@ -32,7 +36,7 @@ public class Utils {
         try {
             return str.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Proxy.getInstance().logger.info(e.toString());
+            Proxy.logger.info(e.toString());
             return null;
         }
     }
@@ -41,11 +45,10 @@ public class Utils {
         try {
             return new String(bytes, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Proxy.getInstance().logger.info(e.toString());
+            Proxy.logger.info(e.toString());
             return null;
         }
     }
-
 
     /*public static void vanillaTabColorUpdate(Player player) {
         String world = player.getLocation().getWorld().getName();

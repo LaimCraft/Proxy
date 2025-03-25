@@ -14,6 +14,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import ru.laimcraft.proxy.events.PlayerConnectToServer;
+import ru.laimcraft.proxy.mysql.MySQLAccounts;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,11 +24,11 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 public class EventHandler {
-    private Proxy proxy = Proxy.getInstance();
+    private Proxy proxy = Proxy.instance;
 
     @Subscribe
     public void onPlayerConnect(LoginEvent event) {
-        Proxy.getInstance().logger.info("  " + event.getPlayer().getUsername() + " " + event.getPlayer().isOnlineMode());
+        Proxy.logger.info("  " + event.getPlayer().getUsername() + " " + event.getPlayer().isOnlineMode());
     }
 
     private boolean validateToken(String accessToken) {
@@ -67,14 +68,12 @@ public class EventHandler {
         switch (event.getIdentifier().getId()) {
             case "laimcraft:proxy":
                 ByteArrayDataInput input = event.dataAsDataStream();
-                String key = input.readUTF();
-                if (!key.equals(Proxy.getInstance().secret)) return;
                 String request = input.readUTF();
                 if (request.equalsIgnoreCase("transfer")) {
                     String serverName = input.readUTF();
                     String login = input.readUTF();
-                    Player player = Proxy.getInstance().server.getPlayer(login).get();
-                    RegisteredServer server = Proxy.getInstance().server.getServer(serverName).get();
+                    Player player = Proxy.server.getPlayer(login).get();
+                    RegisteredServer server = Proxy.server.getServer(serverName).get();
 
                     ConnectionRequestBuilder connectionRequestBuilder =
                             player.createConnectionRequest(server);
@@ -83,7 +82,7 @@ public class EventHandler {
                     return;
                 } if (request.equalsIgnoreCase("login")) {
                 String login = input.readUTF();
-                Player player = Proxy.getInstance().server.getPlayer(login).get();
+                Player player = Proxy.server.getPlayer(login).get();
                 Proxy.authPlayers.put(login, player);
                 return;
             } else return;
@@ -93,14 +92,33 @@ public class EventHandler {
     }
 
     @Subscribe
+    public void onServer(ServerConnectedEvent event) throws InterruptedException {
+        Proxy.server.getServer("lobby").get().sendMessage(Component.text("hi"));
+        if (event.getServer().getServerInfo().getName().equals("lobby")) {
+            if (!Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) { // Игрок не авторизирован
+                String login = MySQLAccounts.getLoginByLogin(event.getPlayer().getUsername());
+                if(login == null) {
+                    event.getPlayer().sendMessage(Messages.registerSendMessage);
+                    return;}
+                event.getPlayer().sendMessage(Messages.loginSendMessage);
+            }
+        }
+    }
+
+    @Subscribe
     public void onSrv(ServerPreConnectEvent event) throws InterruptedException {
-        if (event.getOriginalServer().getServerInfo().getName().equals("lobby")) return;
-        if (Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) return;
-        String message = "Нельзя зайти на сервер пока вы не авторизовались.";
-        Component component = Component.text(message)
-                .color(TextColor.color(0xFF0000));
-        event.getPlayer().sendMessage(component);
-        event.setResult(ServerPreConnectEvent.ServerResult.denied());
+        /*proxy.logger.info("======ServerPreConnectEvent " + event.getPlayer().getUsername() + " original "
+                + event.getOriginalServer() + ", previous " + event.getPreviousServer());*/
+        // original - Сервер на который я захожу, previous - Сервер на котором я был до этого, при первом заходе previous = null
+        if (!event.getOriginalServer().getServerInfo().getName().equals("lobby")) {
+            if (Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) return;
+            String message = "Нельзя зайти на сервер пока вы не авторизовались.";
+            Component component = Component.text(message)
+                    .color(TextColor.color(0xFF0000));
+            event.getPlayer().sendMessage(component);
+            event.setResult(ServerPreConnectEvent.ServerResult.denied());
+            return;
+        }
     }
 
     @Subscribe

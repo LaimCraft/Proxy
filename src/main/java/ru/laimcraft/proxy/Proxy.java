@@ -14,6 +14,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -32,18 +33,19 @@ import java.util.List;
 public class Proxy {
 
     public static final HashMap<String, Player> authPlayers = new HashMap<>();
-    public final ProxyServer server;
-    public final Logger logger;
-    private static Proxy instance;
+    public static ProxyServer server;
+    public static Logger logger;
+    public static Proxy instance;
     public final Path dir;
-    public final String secret = "YAm3Q5pioe4q";
+    public static final ChannelIdentifier laimcraftProxy = MinecraftChannelIdentifier.create("laimcraft", "proxy");
 
     @Inject
     public Proxy(ProxyServer server, Logger logger, @DataDirectory Path dir) throws InterruptedException {
-        this.server = server;
-        this.logger = logger;
+        Proxy.server = server;
+        Proxy.logger = logger;
         this.dir = dir;
         instance = this;
+
     }
 
     @Subscribe
@@ -69,8 +71,7 @@ public class Proxy {
         server.getCommandManager().register(metaOnline, new Online());
         server.getCommandManager().register(metaLobby, new ToLobby());
         server.getCommandManager().register(metaHub, new ToLobby());
-        server.getChannelRegistrar().register(MinecraftChannelIdentifier.create("laimcraft", "proxy"));
-        // server.getCommandManager().register(coins());
+        server.getChannelRegistrar().register(laimcraftProxy);
     }
 
     @Subscribe
@@ -79,11 +80,8 @@ public class Proxy {
         //Сохранение авторизованных игроков и их сессий
     }
 
-    public static Proxy getInstance() {
-        return instance;
-    }
-
     private BrigadierCommand coins() { // Не реальная команда!
+
         LiteralCommandNode<CommandSource> coins = BrigadierCommand.literalArgumentBuilder("coins") //Команда
                 .executes(commandContext -> {
                     CommandSource source = commandContext.getSource();
