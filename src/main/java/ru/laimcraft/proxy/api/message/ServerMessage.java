@@ -5,4 +5,6 @@ public class ServerMessage extends Message {
     public ServerMessage(byte[] bytes) {
         super(bytes);
     }
+
+    public void acceptServer() {}
 }

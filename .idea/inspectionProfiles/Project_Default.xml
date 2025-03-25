@@ -15,10 +15,12 @@
     <inspection_tool class="InfiniteLoopStatement" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LoopStatementsThatDontLoop" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OptionalGetWithoutIsPresent" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantMethodOverride" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StringConcatenationArgumentToLogCall" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="SuspiciousIndentAfterControlStatement" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryReturn" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnstableApiUsage" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="unused" enabled="false" level="WARNING" enabled_by_default="false" checkParameterExcludingHierarchy="false">
       <option name="LOCAL_VARIABLE" value="true" />
       <option name="FIELD" value="true" />

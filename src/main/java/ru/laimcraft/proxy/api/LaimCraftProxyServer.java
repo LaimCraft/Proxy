@@ -50,14 +50,11 @@ public class LaimCraftProxyServer {
 
                 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-                while (true)
-                    if(objectInputStream.readObject() instanceof final ProxyMessage proxyMessage)
-                        Proxy.server.getScheduler().buildTask(Proxy.server, proxyMessage::acceptProxyServer);
-                /*while (true) {
+                while (true) {
                     if(objectInputStream.readObject() instanceof final ProxyMessage proxyMessage) {
-                        Proxy.server.getScheduler().buildTask(Proxy.server, proxyMessage::acceptProxyServer);
+                        Proxy.server.getScheduler().buildTask(Proxy.server, proxyMessage::acceptProxyServer).schedule();
                     }
-                }*/
+                }
             } catch (Exception ex) {
                 Proxy.logger.info("Exception LaimCraftProxyServer " + ex.getMessage() + " " + ex.toString());
             }
