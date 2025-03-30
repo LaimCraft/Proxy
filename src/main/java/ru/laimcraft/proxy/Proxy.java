@@ -23,6 +23,7 @@ import ru.laimcraft.proxy.commands.Coins;
 import ru.laimcraft.proxy.commands.Online;
 import ru.laimcraft.proxy.commands.ToLobby;
 import ru.laimcraft.proxy.components.Servers;
+import ru.laimcraft.proxy.rpc.NettyServer;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -72,6 +73,9 @@ public class Proxy {
         server.getCommandManager().register(metaLobby, new ToLobby());
         server.getCommandManager().register(metaHub, new ToLobby());
         server.getChannelRegistrar().register(laimcraftProxy);
+
+        new Thread(NettyServer::new).start();
+
     }
 
     @Subscribe

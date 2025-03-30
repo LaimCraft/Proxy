@@ -1,6 +1,8 @@
 package ru.laimcraft.proxy.api.message.proxy.auth;
 
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.velocitypowered.api.proxy.Player;
 import ru.laimcraft.proxy.Proxy;
 import ru.laimcraft.proxy.api.message.ProxyMessage;
@@ -11,6 +13,12 @@ public class AuthProxyMessage extends ProxyMessage {
 
     public AuthProxyMessage(byte[] bytes) {
         super(bytes);
+    }
+
+    public AuthProxyMessage(String login) {
+        ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
+        byteArrayDataOutput.writeUTF(login);
+        super(byteArrayDataOutput.toByteArray());
     }
 
     @Override

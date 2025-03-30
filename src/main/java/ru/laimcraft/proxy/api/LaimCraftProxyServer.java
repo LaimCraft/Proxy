@@ -52,7 +52,7 @@ public class LaimCraftProxyServer {
 
                 while (true) {
                     if(objectInputStream.readObject() instanceof final ProxyMessage proxyMessage) {
-                        Proxy.server.getScheduler().buildTask(Proxy.server, proxyMessage::acceptProxyServer).schedule();
+
                     }
                 }
             } catch (Exception ex) {

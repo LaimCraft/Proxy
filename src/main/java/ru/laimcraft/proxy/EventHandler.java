@@ -63,7 +63,7 @@ public class EventHandler {
     public void onServerConnectEvent(ServerConnectedEvent event) throws URISyntaxException {
     }
 
-    @Subscribe
+    /*@Subscribe
     public void onMessage(PluginMessageEvent event) {
         switch (event.getIdentifier().getId()) {
             case "laimcraft:proxy":
@@ -89,11 +89,10 @@ public class EventHandler {
             default:
                 return;
         }
-    }
+    }*/
 
     @Subscribe
     public void onServer(ServerConnectedEvent event) throws InterruptedException {
-        Proxy.server.getServer("lobby").get().sendMessage(Component.text("hi"));
         if (event.getServer().getServerInfo().getName().equals("lobby")) {
             if (!Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) { // Игрок не авторизирован
                 String login = MySQLAccounts.getLoginByLogin(event.getPlayer().getUsername());
