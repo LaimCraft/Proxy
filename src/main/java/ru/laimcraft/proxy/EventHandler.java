@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import ru.laimcraft.proxy.events.PlayerConnectToServer;
 import ru.laimcraft.proxy.mysql.MySQLAccounts;
+import ru.laimcraft.proxy.rpc.RPC;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,29 +30,6 @@ public class EventHandler {
     @Subscribe
     public void onPlayerConnect(LoginEvent event) {
         Proxy.logger.info("  " + event.getPlayer().getUsername() + " " + event.getPlayer().isOnlineMode());
-    }
-
-    private boolean validateToken(String accessToken) {
-        String urlString = "https://sessionserver.mojang.com/session/minecraft/validate";
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            connection.setDoOutput(true);
-
-            // Отправляем пустое тело запроса
-            try (OutputStream os = connection.getOutputStream()) {
-                os.write(new byte[0]);
-            }
-
-            int responseCode = connection.getResponseCode();
-            return responseCode == 204; // 204 No Content означает, что токен действителен
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false; // В случае ошибки считаем токен недействительным
-        }
     }
 
     @Subscribe
@@ -92,20 +70,22 @@ public class EventHandler {
     }*/
 
     @Subscribe
-    public void onServer(ServerConnectedEvent event) throws InterruptedException {
+    public void onServer(ServerConnectedEvent event) {
         if (event.getServer().getServerInfo().getName().equals("lobby")) {
             if (!Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) { // Игрок не авторизирован
                 String login = MySQLAccounts.getLoginByLogin(event.getPlayer().getUsername());
-                if(login == null) {
+                if (login == null) {
                     event.getPlayer().sendMessage(Messages.registerSendMessage);
-                    return;}
-                event.getPlayer().sendMessage(Messages.loginSendMessage);
+                    return;
+                } else event.getPlayer().sendMessage(Messages.loginSendMessage);
+            } else {
+                RPC.getServer(RPC.ServerName.LOBBY).sendMessage(String.format("login %s", event.getPlayer().getUsername()));
             }
         }
     }
 
     @Subscribe
-    public void onSrv(ServerPreConnectEvent event) throws InterruptedException {
+    public void onSrv(ServerPreConnectEvent event) {
         /*proxy.logger.info("======ServerPreConnectEvent " + event.getPlayer().getUsername() + " original "
                 + event.getOriginalServer() + ", previous " + event.getPreviousServer());*/
         // original - Сервер на который я захожу, previous - Сервер на котором я был до этого, при первом заходе previous = null

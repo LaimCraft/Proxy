@@ -7,9 +7,9 @@ import java.util.Date;
 
 public class MySQLAccounts {
 
-    public static String getLoginByLogin(String Login) {
+    public static String getLoginByLogin(String login) {
         try (Connection connection = DriverManager.getConnection(Settings.host, Settings.user, Settings.password)) {
-            ResultSet resultSet = connection.createStatement().executeQuery("SELECT `login` FROM `laimcraft`.`accounts` WHERE login = '"+Login+"';");
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT `login` FROM `laimcraft`.`accounts` WHERE login = '"+login+"';");
             while (resultSet.next()) {
                 return resultSet.getString(1);
             }return null;
@@ -17,9 +17,9 @@ public class MySQLAccounts {
             Proxy.logger.info(ex.getMessage());
             return "ex";}}
 
-    public static int getBalance(String Login) {
+    public static int getBalance(String login) {
         try (Connection connection = DriverManager.getConnection(Settings.host, Settings.user, Settings.password)) {
-            ResultSet resultSet = connection.createStatement().executeQuery("SELECT `balance` FROM `laimcraft`.`accounts` WHERE login = '"+Login+"';");
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT `balance` FROM `laimcraft`.`accounts` WHERE login = '"+login+"';");
             while (resultSet.next()) {
                 return resultSet.getInt(1);
             }return -1;
