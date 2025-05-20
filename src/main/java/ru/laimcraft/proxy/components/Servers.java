@@ -20,5 +20,8 @@ public class Servers {
         server.registerServer(new ServerInfo("pillarsoffortune", new InetSocketAddress("127.0.0.1", 60421)));
         server.registerServer(new ServerInfo("oceanworld", new InetSocketAddress("127.0.0.1", 6740)));
         server.registerServer(new ServerInfo("skyblock", new InetSocketAddress("127.0.0.1", 60400)));
+        server.registerServer(new ServerInfo("grif", new InetSocketAddress("127.0.0.1", 60450)));
+        //Порты с 60451 по 60459 заняты VDS для сервера grif и туннеля
+        // 60451 SFTP
     }
 }
