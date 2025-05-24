@@ -13,6 +13,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import ru.laimcraft.proxy.events.PlayerConnectToServer;
 import ru.laimcraft.proxy.mysql.MySQLAccounts;
 import ru.laimcraft.proxy.rpc.RPC;
@@ -75,11 +76,17 @@ public class EventHandler {
             if (!Proxy.authPlayers.containsKey(event.getPlayer().getUsername())) { // Игрок не авторизирован
                 String login = MySQLAccounts.getLoginByLogin(event.getPlayer().getUsername());
                 if (login == null) {
-                    event.getPlayer().sendMessage(Messages.registerSendMessage);
+                    RPC.getServer(RPC.ServerName.LOBBY).sendMessage(String.format("message-to-player %s %s",
+                            event.getPlayer().getUsername(), GsonComponentSerializer.gson().serialize(Messages.registerSendMessage)));
                     return;
-                } else event.getPlayer().sendMessage(Messages.loginSendMessage);
+                } else {
+                    RPC.getServer(RPC.ServerName.LOBBY).sendMessage(String.format("message-to-player %s %s",
+                            event.getPlayer().getUsername(), GsonComponentSerializer.gson().serialize(Messages.loginSendMessage)));
+                    return;
+                }
             } else {
                 RPC.getServer(RPC.ServerName.LOBBY).sendMessage(String.format("login %s", event.getPlayer().getUsername()));
+                return;
             }
         }
     }

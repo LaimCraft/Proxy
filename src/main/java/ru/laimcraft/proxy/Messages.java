@@ -50,7 +50,7 @@ public class Messages {
 
     }
     public static Component kickUsername(String player, String username) {
-        return Component.text("Вы зашли в игру под ником " + player + ", а зарегестрировались под ником " + username + "\n" +
+        return Component.text("Вы зашли в игру под ником " + player + ", а зарегистрировались под ником " + username + "\n" +
                         "Поменяйте свой ник и попробуйте снова")
                 .color(TextColor.color(0xFF0000));
     }
